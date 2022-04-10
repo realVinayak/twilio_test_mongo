@@ -70,13 +70,13 @@ app.post('/name', (request, response) => {
   } else {
     gather();
   }
-  tml.record({
+  /**tml.record({
     action: '/age',
     finishOnKey: 1,
     timeout: 10,
     recordingStatusCallback: '/name_record',
     recordingStatusCallbackMethod: 'GET'
-  });
+  });**/
   response.type('text/xml');
   response.send(tml.toString());
 });
