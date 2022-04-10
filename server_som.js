@@ -50,7 +50,7 @@ app.post('/join', (request, response) => {
   response.send(tml.toString());
 })
 app.get('/response_user', (req, res)=>{
-    console.log(req)
+    console.log(req.Digits, req.From)
 })
 
   /**if (request.body.Digits) {
