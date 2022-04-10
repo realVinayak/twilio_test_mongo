@@ -1,7 +1,4 @@
 const express = require('express');
-const WebSocket = require('ws');
-const http = require("http")
-const wss = new WebSocket.Server("ws://34.133.218.58:80")
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const mongoose = require('mongoose')
 let obj_employer={
@@ -24,7 +21,6 @@ const key_ = "mongodb+srv://vinayakjha12345:9313191625qaz@cluster0.sgzuw.mongodb
 mongoose.connect(key_, {useNewUrlParser:true})
   .then(()=>console.log('MongoDB Connected.... For Link'))
   .catch(err=>console.log(err))
-
 const linkSchema = new mongoose.Schema({
   phone_number: {
     type: String
@@ -50,20 +46,6 @@ const linkSchema = new mongoose.Schema({
 })
 const links_ = mongoose.model('link_ae', linkSchema)
 const app = express();
-const app2 = express();
-
-
-var server = http.createServer(app2)
-server.listen(port)
-
-console.log("http server listening on %d", port)
-console.log("websocket server created")
-
-wss.on("connection", function(ws) {
-  var id = setInterval(function() {
-    ws.send(JSON.stringify(new Date()), function() {  })
-  }, 1000)})
-
 const PORT = process.env.PORT || 5000;
 app.post('/join', (request, response) => {
   const tml = new VoiceResponse();
@@ -162,7 +144,6 @@ app.get('/location_job_record', (req, res)=>{
 app.get('/job_descrip_record', (req, res)=>{
     obj_employer.job_descrip = req.query.RecordingUrl;
 })
-
 app.post('/hangup', (request, response) => {
   const tml = new VoiceResponse();
   tml.hangup();
@@ -249,9 +230,3 @@ app.get('/qual_record', (req, res)=>{
         console.log(err)
     })
 })
-app.listen(PORT, () => {
-  console.log(
-    'Now listening on port 3000. ' +
-    'Be sure to restart when you make code changes!'
-  );
-});
