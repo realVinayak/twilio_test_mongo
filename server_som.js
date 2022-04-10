@@ -5,8 +5,9 @@ let obj_employer={
     name:"",
     phone_number:"",
     age_of_employee:"",
-    job_descrip:"",
-    job_loc:""
+    job_loc:"",
+    job_descrip:""
+    
 }
 let obj_app={
     name:"",
