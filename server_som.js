@@ -15,7 +15,7 @@ let obj_app={
     age:"",
     location:"",
     will_move:"",
-    job_qual=""
+    job_qual:""
 }
 const key_ = "mongodb+srv://vinayakjha12345:9313191625qaz@cluster0.sgzuw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 mongoose.connect(key_, {useNewUrlParser:true})
