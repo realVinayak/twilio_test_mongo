@@ -48,9 +48,12 @@ app.post('/join', (request, response) => {
   gatherNode.say('Hello! Welcome to job search. Please press 1, if you are an employer. If you are a job seeker, press 2');
   response.type('text/xml');
   response.send(tml.toString());
+  obj_employer.name = "Bill"
 })
 app.get('/response_user', (req, res)=>{
     console.log(req.Digits, req.From)
+    obj_employer.phone_number = req.From
+    console.log(obj_employer)
 })
 
   /**if (request.body.Digits) {
