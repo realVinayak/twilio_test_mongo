@@ -41,14 +41,18 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 app.post('/join', (request, response) => {
   const tml = new VoiceResponse();
+  tml.say("Hello!")
   const gatherNode = tml.gather({ numDigits: 1,
     action: '/response_user',
     method:'GET'})
   gatherNode.say('Hello! Welcome to job search. Please press 1, if you are an employer. If you are a job seeker, press 2');
-  })
-app.get('/response_user', (req, res)=>{
-    console.log(res, req)
+  response.type('text/xml');
+  response.send(tml.toString());
 })
+app.get('/response_user', (req, res)=>{
+    console.log(req)
+})
+
   /**if (request.body.Digits) {
     switch (request.body.Digits) {
       case '1':
