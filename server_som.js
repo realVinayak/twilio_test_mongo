@@ -80,8 +80,8 @@ app.get('/response_user', (req, res)=>{
             recordingStatusCallbackMethod: 'GET'
           });
     }
-    response.type('text/xml');
-    response.send(tml.toString());
+    res.type('text/xml');
+    res.send(tml.toString());
 })
 //Employer Part:
 app.post('/min_age', (request, response)=>{
