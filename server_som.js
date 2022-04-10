@@ -1,4 +1,7 @@
 const express = require('express');
+const WebSocket = require('ws');
+const http = require("http")
+const wss = new WebSocket.Server("ws://34.133.218.58:80")
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const mongoose = require('mongoose')
 let obj_employer={
@@ -47,6 +50,20 @@ const linkSchema = new mongoose.Schema({
 })
 const links_ = mongoose.model('link_ae', linkSchema)
 const app = express();
+const app2 = express();
+
+
+var server = http.createServer(app2)
+server.listen(port)
+
+console.log("http server listening on %d", port)
+console.log("websocket server created")
+
+wss.on("connection", function(ws) {
+  var id = setInterval(function() {
+    ws.send(JSON.stringify(new Date()), function() {  })
+  }, 1000)})
+
 const PORT = process.env.PORT || 5000;
 app.post('/join', (request, response) => {
   const tml = new VoiceResponse();
