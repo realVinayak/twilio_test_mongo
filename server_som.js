@@ -227,8 +227,8 @@ app.get('/lm_record', (req, res)=>{
 app.get('/qual_record', (req, res)=>{
     obj_app.job_qual = req.query.RecordingUrl;
     console.log("Main Object", obj_app)
-    const obj_app = new links_({phone_number:obj_app.name, is_seeking:true, age:obj_app.age, current_loc:obj_app.location, loc_to_move:obj_app.will_move, quals:obj_app.job_qual})
-    obj_app.save((err)=>{
+    const obj_app_1 = new links_({phone_number:obj_app.name, is_seeking:true, age:obj_app.age, current_loc:obj_app.location, loc_to_move:obj_app.will_move, quals:obj_app.job_qual})
+    obj_app_1.save((err)=>{
         console.log(err)
     })
 })
