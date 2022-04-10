@@ -14,12 +14,27 @@ const linkSchema = new mongoose.Schema({
   is_seeking: {
     type: Boolean
   },
-  links: [String]
+  name:{
+    type: String
+  },
+  age:{
+    type: String
+  },
+  current_loc:{
+    type: String
+  },
+  loc_to_move:{
+    type: String
+  },
+  quals:{
+    type: String
+  }
 })
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.post('/name', (request, response) => {
+  console.log(request)
   const tml = new VoiceResponse();
   tml.say({ voice: 'alice' }, 'What is your name');
   tml.record({
