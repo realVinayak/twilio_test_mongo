@@ -9,6 +9,14 @@ let obj_employer={
     job_descrip:"",
     job_loc:""
 }
+let obj_app={
+    name:"",
+    phone_number:"",
+    age:"",
+    location:"",
+    will_move:"",
+    job_qual=""
+}
 const key_ = "mongodb+srv://vinayakjha12345:9313191625qaz@cluster0.sgzuw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 mongoose.connect(key_, {useNewUrlParser:true})
   .then(()=>console.log('MongoDB Connected.... For Link'))
@@ -41,66 +49,49 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 app.post('/join', (request, response) => {
   const tml = new VoiceResponse();
-  tml.say("Hello!")
   const gatherNode = tml.gather({ numDigits: 1,
     action: '/response_user',
     method:'GET'})
   gatherNode.say('Hello! Welcome to job search. Please press 1, if you are an employer. If you are a job seeker, press 2');
   response.type('text/xml');
   response.send(tml.toString());
-  obj_employer.name = "Bill"
 })
 app.get('/response_user', (req, res)=>{
     console.log(req.Digits, req.From)
-    obj_employer.phone_number = req.From
+    obj_employer.phone_number = req.query.From
     console.log(obj_employer)
-})
-
-  /**if (request.body.Digits) {
-    switch (request.body.Digits) {
-      case '1':
-        tml.say('Please answer the following questions');
-        tml.say("What is your name")
+    let is_employer = (re.query.Digits == '1')
+    const tml = new VoiceResponse();
+    tml.say("What is your name")
+    if (is_employer){
         tml.record({
-            action: '/age_emplr',
+            action: '/min_age',
+            finishOnKey: 1,
+            timeout: 10,
+            recordingStatusCallback: '/name_emplyr',
+            recordingStatusCallbackMethod: 'GET'
+          });
+    }else{
+        tml.record({
+            action: '/age',
             finishOnKey: 1,
             timeout: 10,
             recordingStatusCallback: '/name_record',
             recordingStatusCallbackMethod: 'GET'
           });
-        break;
-      case '2':
-        tml.say('Please answer the following questions');
-        break;
-      default:
-        tml.say("Sorry, I don't understand that choice.");
-        tml.pause();
-        gather();
-        break;
     }
-  } else {
-    gather();
-  }
-  tml.record({
-    action: '/age',
-    finishOnKey: 1,
-    timeout: 10,
-    recordingStatusCallback: '/name_record',
-    recordingStatusCallbackMethod: 'GET'
-  });
-  response.type('text/xml');
-  response.send(tml.toString());
-});
-**/
+    response.type('text/xml');
+    response.send(tml.toString());
+})
 //Employer Part:
-app.post('/age_emplr', (request, response)=>{
+app.post('/min_age', (request, response)=>{
     const tml = new VoiceResponse();
     tml.say({ voice: 'alice' }, 'What should be the minimum age of employee');
     tml.record({
     action: '/location_job',
     finishOnKey: 1,
     timeout: 10,
-    recordingStatusCallback: '/age_emplr_record',
+    recordingStatusCallback: '/min_age_record',
     recordingStatusCallbackMethod: 'GET'
     });
     response.type('text/xml');
@@ -123,30 +114,36 @@ app.post('/job_descrip', (request, response) => {
     const tml = new VoiceResponse();
     tml.say({ voice: 'alice' }, 'Please describe the job, and what experience should an employee have');
     tml.record({
-      action: '/get_phone_number',
+      action: '/end_emplyr',
       finishOnKey: 1,
       timeout: 10,
-      recordingStatusCallback: '/job_descrip_job',
+      recordingStatusCallback: '/job_descrip_record',
       recordingStatusCallbackMethod: 'GET'
     });
     response.type('text/xml');
     response.send(tml.toString());
   });
-app.post('/get_phone_number', (request, response)=>{
-    const gatherNode = tml.gather({ 
-        numDigits: 10,
-        action: '/transf_phone_number',
-        method: 'GET'
-    });
+app.post('/end_emplyr', (request, response)=>{
+    const tml = new VoiceResponse();
+    tml.say("We will call you when we find appropriate matches")
+    response.type('text/xml');
+    response.send(tml.toString());
+    tml.hangup()
+    console.log(obj_employer)
 })
-app.get('/transf_phone_number', (request, response)=>{
-  const tml = new VoiceResponse();
-  tml.hangup();
-  response.type('text/xml');
-  response.send(tml.toString())
-  console.log(request.body.Digits)
-  obj_employer.phone_number = request.body.Digits;
+app.get('/name_emplyr', (req, res)=>{
+    obj_employer.name = req.query.RecordingUrl;
 })
+app.get('/min_age_record', (req, res)=>{
+    obj_employer.age_of_employee = req.query.RecordingUrl;
+})
+app.get('/location_job_record', (req, res)=>{
+    obj_employer.job_loc = req.query.RecordingUrl;
+})
+app.get('/job_descrip_record', (req, res)=>{
+    obj_employer.job_descrip = req.query.RecordingUrl;
+})
+
 app.post('/hangup', (request, response) => {
   const tml = new VoiceResponse();
   tml.hangup();
@@ -168,7 +165,7 @@ app.post('/age', (request, response) => {
 });
 app.post('/location', (request, response) => {
   const tml = new VoiceResponse();
-  tml.say({ voice: 'alice' }, 'Where do you currently live');
+  tml.say({ voice: 'alice' }, 'What is your current zipcode');
   tml.record({
     action: '/location_movement',
     finishOnKey: 1,
@@ -181,7 +178,7 @@ app.post('/location', (request, response) => {
 });
 app.post('/location_movement', (request, response) => {
   const tml = new VoiceResponse();
-  tml.say({ voice: 'alice' }, 'Where do you wanna work, and how far are you willing to relocate');
+  tml.say({ voice: 'alice' }, 'How many miles are you willing to relocate');
   tml.record({
     action: '/qualifications',
     finishOnKey: 1,
@@ -196,7 +193,7 @@ app.post('/qualifications', (request, response) => {
   const tml = new VoiceResponse();
   tml.say({ voice: 'alice' }, 'What sort of job are you looking for, and what is your experience level');
   tml.record({
-    action: '/hangup',
+    action: '/app_end',
     finishOnKey: 1,
     timeout: 0,
     recordingStatusCallback: '/qual_record',
@@ -205,21 +202,28 @@ app.post('/qualifications', (request, response) => {
   response.type('text/xml');
   response.send(tml.toString());
 });
+app.post('/app_end', (req, res)=>{
+    const tml = new VoiceResponse();
+    tml.say("Thanks for answering the questions. We will call you when we find job matches for you")
+    tml.hangup()
+    res.type('text/xml');
+    res.send(tml.toString());
+    console.log(obj_app)
+})
 app.get('/name_record', (req, res)=>{
-  console.log("Got name record now");
-  console.log(req.query);
+  obj_app.name = req.query.RecordingUrl;
 })
 app.get('/age_record', (req, res)=>{
-  console.log(req.query);
+  obj_app.age = req.query.RecordingUrl;
 })
 app.get('/location_record', (req, res)=>{
-  console.log(req.query)
+ obj_app.location = req.query.RecordingUrl;
 })
 app.get('/lm_record', (req, res)=>{
-  console.log(req.query)
+ obj_app.will_move = req.query.RecordingUrl;
 })
 app.get('/qual_record', (req, res)=>{
-  console.log(req.query)
+    obj_app.job_qual = req.query.RecordingUrl;
 })
 app.listen(PORT, () => {
   console.log(
