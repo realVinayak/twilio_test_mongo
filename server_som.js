@@ -59,8 +59,9 @@ app.post('/join', (request, response) => {
 app.get('/response_user', (req, res)=>{
     console.log(req.Digits, req.From)
     obj_employer.phone_number = req.query.From
+    obj_app.phone_number = req.query.From
     console.log(obj_employer)
-    let is_employer = (req.query.Digits == '1')
+    let is_employer = (re.query.Digits == '1')
     const tml = new VoiceResponse();
     tml.say("What is your name")
     if (is_employer){
@@ -80,8 +81,8 @@ app.get('/response_user', (req, res)=>{
             recordingStatusCallbackMethod: 'GET'
           });
     }
-    res.type('text/xml');
-    res.send(tml.toString());
+    response.type('text/xml');
+    response.send(tml.toString());
 })
 //Employer Part:
 app.post('/min_age', (request, response)=>{
@@ -208,7 +209,7 @@ app.post('/app_end', (req, res)=>{
     tml.hangup()
     res.type('text/xml');
     res.send(tml.toString());
-    console.log(obj_app)
+    
 })
 app.get('/name_record', (req, res)=>{
   obj_app.name = req.query.RecordingUrl;
@@ -224,6 +225,7 @@ app.get('/lm_record', (req, res)=>{
 })
 app.get('/qual_record', (req, res)=>{
     obj_app.job_qual = req.query.RecordingUrl;
+    console.log("Main Object", obj_app)
 })
 app.listen(PORT, () => {
   console.log(
