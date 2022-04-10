@@ -60,7 +60,7 @@ app.get('/response_user', (req, res)=>{
     console.log(req.Digits, req.From)
     obj_employer.phone_number = req.query.From
     console.log(obj_employer)
-    let is_employer = (re.query.Digits == '1')
+    let is_employer = (req.query.Digits == '1')
     const tml = new VoiceResponse();
     tml.say("What is your name")
     if (is_employer){
