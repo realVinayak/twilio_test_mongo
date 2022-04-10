@@ -45,7 +45,7 @@ app.post('/name', (request, response) => {
     const gatherNode = tml.gather({ numDigits: 1 });
     gatherNode.say('Hello! Welcome to job search. Please press 1, if you are an employer. If you are a job seeker, press 2');
   }
-  if (request.body.Digits) {
+  if (request.body) {
     switch (request.body.Digits) {
       case '1':
         tml.say('Please answer the following questions');
