@@ -90,20 +90,20 @@ app.post('/qualifications', (request, response) => {
   response.type('text/xml');
   response.send(tml.toString());
 });
-app.post('/name_record', (req, res)=>{
+app.get('/name_record', (req, res)=>{
   console.log("Got name record now");
   console.log(req.query);
 })
-app.post('/age_record', (req, res)=>{
+app.get('/age_record', (req, res)=>{
   console.log(req.query);
 })
-app.post('/location_record', (req, res)=>{
+app.get('/location_record', (req, res)=>{
   console.log(req.query)
 })
-app.post('/lm_record', (req, res)=>{
+app.get('/lm_record', (req, res)=>{
   console.log(req.query)
 })
-app.post('/qual_record', (req, res)=>{
+app.get('/qual_record', (req, res)=>{
   console.log(req.query)
 })
 app.listen(PORT, () => {
